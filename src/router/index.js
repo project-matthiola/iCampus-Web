@@ -3,7 +3,7 @@ import Router from 'vue-router'
 import menus from '@/config/menu-config'
 import Login from '@/page/Login'
 import Register from '@/page/Register'
-import Home from '@/page/home'
+import Home from '@/page/Home'
 
 Vue.use(Router);
 
@@ -31,7 +31,7 @@ menus.forEach((item) => {
     routes.push({
       path: `/${sub.componentName}`,
       name: sub.componentName,
-      component: () => import(`@/components/${sub.componentName}`)
+      component: () => import(`@/page/${sub.componentName}`)
     })
   })
 });

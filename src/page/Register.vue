@@ -1,6 +1,6 @@
 <template>
     <div class="register_page fillcontain">
-      <!-- <myCanvas :dotsNum="dotsNum" :isColor="true"></myCanvas> -->
+      <myCanvas :dotsNum="dotsNum" :isColor="true"></myCanvas>
       <transition class="form-fade" mode="in-out">
         <section class="form_container" v-show="showRegister">
           <div class="manage_tip">
@@ -29,7 +29,8 @@
 <script>
   import myCanvas from 'vue-atom-canvas'
   import axios from 'axios'
-  import { register} from "../api/api";
+  import crypto from 'crypto'
+  import { register,requestLogin } from "../api/api";
 
   export default {
       name: "Register",
@@ -91,19 +92,32 @@
           submitForm2(formName) {
             this.$refs[formName].validate((valid) => {
               if(valid) {
-                //alert('submit');
-                let registerParams = {username: this.registerForm.username, password: this.registerForm.password,
-                role: 1};
-                register(registerParams).then(data => {
-                  let { msg, code, user } = data;
-                  if(code !== 200) {
-                    this.$message({
-                      message: msg,
-                      type: 'error'
-                    });
+                let md5 = crypto.createHash("md5");
+                md5.update(this.registerForm.password);
+                let encode_pwd = md5.digest('hex');
+
+                let registerParams = {user_id: this.registerForm.username, password: encode_pwd,
+                role: "ROLE_STUDENT"};
+                let requestParams = {'Member.user_id': this.registerForm.username};
+                requestLogin(requestParams).then((res) => {
+                  if(res.data.Member) {
+                    this.$message.error('该用户已注册！');
+                    this.$refs[formName].resetFields();
                   } else {
-                    sessionStorage.setItem('user', JSON.stringify(user));
-                    this.$router.push({path: '/'});
+                    register(registerParams).then(data => {
+                      console.log(data);
+                      let type = data.type;
+                      if(type !== "member") {
+                        this.$message.error('注册错误！');
+                        this.$refs[formName].resetFields();
+                      } else {
+                        this.$message({
+                          message: '注册成功，请登录！',
+                          type: 'success'
+                        });
+                        this.$router.push({path: '/login'});
+                      }
+                    });
                   }
                 });
               }else {
