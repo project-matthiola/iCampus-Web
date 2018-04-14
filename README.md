@@ -1,6 +1,7 @@
-# vue-dashboard
+# iCampus-Web
 
-> A Vue.js project
+> the ackstage management system of iCampus based on Vue and ElementUI
+
 
 ## Build Setup
 
