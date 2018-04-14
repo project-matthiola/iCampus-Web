@@ -56,6 +56,9 @@
       mounted() {
           this.showLogin= true;
       },
+      created() {
+        document.title = 'iCampus登录'
+      },
       methods: {
           async submitForm(formName) {
             this.$refs[formName].validate(async (valid) => {

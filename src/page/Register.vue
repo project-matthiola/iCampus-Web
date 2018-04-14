@@ -88,6 +88,9 @@
       mounted() {
         this.showRegister= true;
       },
+      created() {
+        document.title = 'iCampus注册'
+      },
       methods: {
           submitForm2(formName) {
             this.$refs[formName].validate((valid) => {

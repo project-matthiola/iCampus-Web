@@ -30,8 +30,16 @@
       },
       methods: {
           async handleCommand(command) {
-            this.$message('click on item ' + command);
-            console.log(command);
+            //this.$message('click on item ' + command);
+            //console.log(command);
+            if(command === 'home') {
+              let user = sessionStorage.getItem('user');
+              if(user) {
+                this.$router.push('/');
+              } else {
+                this.$router.push('login');
+              }
+            }
             if(command === 'signout') {
               sessionStorage.removeItem('user');
               this.$message({
