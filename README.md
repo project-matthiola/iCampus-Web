@@ -1,6 +1,6 @@
 # iCampus-Web
 
-> the ackstage management system of iCampus based on Vue and ElementUI
+> the backstage management system of iCampus based on Vue and ElementUI
 
 
 ## Build Setup
