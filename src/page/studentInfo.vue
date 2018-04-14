@@ -14,7 +14,7 @@
                 <el-col :span="24" class="">
                   <el-form :inline="true" :model="filters" class="demo-form-inline">
                     <el-form-item>
-                      <el-input v-model="filters.name" placeholder="姓名"></el-input>
+                      <el-input v-model="filters.name" placeholder="学号"></el-input>
                     </el-form-item>
                     <el-form-item>
                       <el-button type="primary" v-on:click="getUser" plain>查询</el-button>
@@ -49,7 +49,6 @@
                 </el-table>
               </template>
 
-              <!-- delete -->
               <el-col :span="24" class="">
                 <el-pagination small layout="prev, pager, next" @current-change="handleCurrentChange" :page-size="10" :total="total" style="float:right"></el-pagination>
               </el-col>
@@ -111,9 +110,11 @@
               </el-dialog>
 
             </el-main>
-            <el-footer>Footer</el-footer>
           </el-container>
         </el-container>
+        <el-footer>
+          <Footer></Footer>
+        </el-footer>
       </el-container>
     </div>
 </template>
@@ -121,6 +122,7 @@
 <script>
   import NavMenu from '@/components/NavMenu'
   import Header from '@/components/Header'
+  import Footer from '@/components/Footer'
   import crypto from 'crypto'
   import axios from 'axios'
   import{ getUserList,register,requestLogin,removeUser } from "../api/api";
@@ -129,7 +131,8 @@
     name: "studentInfo",
     components: {
       NavMenu,
-      Header
+      Header,
+      Footer
     },
     data() {
       return {
@@ -178,11 +181,8 @@
       }
     },
     methods: {
-      handleClick(row) {
-        console.log(row);
-      },
       getUsersList() {
-        let initParams = {};
+        let initParams = {'Member.role': 'ROLE_STUDENT'};
         this.listLoading = true;
         getUserList(initParams).then((res) => {
           this.users = res.data.Member;
@@ -207,7 +207,7 @@
       },
       handleEdit: function(index, row) {
         this.editFormVisible = true;
-        console.log(this.editFormVisible);
+        //console.log(this.editFormVisible);
         this.editForm = Object.assign({}, row);
       },
       handleDel: function(index, row) {
@@ -304,13 +304,16 @@
       },
     },
     mounted: function() {
-      let initParams = {};
+      let initParams = {'Member.role': 'ROLE_STUDENT'};
       this.listLoading = true;
       getUserList(initParams).then((res) => {
         this.users = res.data.Member;
         console.log(this.users);
         this.listLoading = false;
       });
+    },
+    created() {
+      document.title = '学生信息管理'
     }
   }
 </script>

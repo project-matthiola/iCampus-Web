@@ -10,18 +10,18 @@ Vue.use(Router);
 let routes = [
   {
     path: '/',
-    name: '',
-    component: Home
+    name: 'home',
+    component: Home,
   },
   {
     path: '/login',
-    name: '',
-    component: Login
+    name: 'login',
+    component: Login,
   },
   {
     path: '/register',
-    name: '',
-    component: Register
+    name: 'register',
+    component: Register,
   }
 ];
 
@@ -31,10 +31,11 @@ menus.forEach((item) => {
     routes.push({
       path: `/${sub.componentName}`,
       name: sub.componentName,
-      component: () => import(`@/page/${sub.componentName}`)
+      component: () => import(`@/page/${sub.componentName}`),
     })
   })
 });
 
 
 export default new Router({ routes })
+
