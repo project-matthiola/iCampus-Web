@@ -1,6 +1,6 @@
 <template>
   <div class="login_page fillcontain">
-    <myCanvas :dotsNum="dotsNum" :isColor="true"></myCanvas>
+    <!-- <myCanvas :dotsNum="dotsNum" :isColor="true"></myCanvas> -->
     <transition class="form-fade" mode="in-out">
       <section class="form_container" v-show="showLogin">
         <div class="manage_tip">
@@ -77,7 +77,11 @@
                   let encode_pwd = md5.digest('hex');
 
                   let password = this.users[0].password;
-                  if(password === encode_pwd) {
+                  let role = this.users[0].role;
+                  if(role === 'ROLE_STUDENT') {
+                    this.$message.error('权限错误！');
+                    this.$refs[formName].resetFields();
+                  } else if(password === encode_pwd) {
                     this.$message({
                       message: '登录成功！',
                       type: 'success'

@@ -49,7 +49,7 @@
             </template>
 
             <el-col :span="24" class="">
-              <el-pagination small layout="prev, pager, next" @current-change="handleCurrentChange" :page-size="10" :total="total" style="float:right"></el-pagination>
+              <el-pagination small layout="prev, pager, next" @current-change="" :page-size="10" :total="total" style="float:right"></el-pagination>
             </el-col>
 
             <!-- Edit page -->
@@ -123,7 +123,7 @@
     import Footer from '@/components/Footer'
     import crypto from 'crypto'
     import axios from 'axios'
-    import{ getUserList, register,requestLogin,removeUser } from "../api/api";
+    import{ getUserList, register,requestLogin,removeUser,editUser } from "../api/api";
 
     export default {
       name: "teacherInfo",
@@ -210,8 +210,8 @@
           }).then(() => {
             this.listLoading = true;
 
-            let delParams = {'Member.id': row.id };
-            axios.delete('http://202.120.40.87:22471/Entity/Ubfbd4152866263/iCampus/Member/'+row.id).then((res) => {
+            let delParams = {id: row.id };
+            removeUser(delParams).then((res) => {
               this.listLoading = false;
               this.$message({
                 message: '删除成功',
@@ -240,7 +240,7 @@
                 this.editLoading = true;
                 let editParams = Object.assign({}, this.editForm);
                 console.log(editParams);
-                axios.put('http://202.120.40.87:22471/Entity/Ubfbd4152866263/iCampus/Member/'+editParams.id, editParams).then((res) => {
+                editUser(editParams).then((res) => {
                   this.editLoading = false;
                   this.$message({
                     message: '修改成功',
@@ -249,7 +249,7 @@
                   this.$refs['editForm'].resetFields();
                   this.editFormVisible = false;
                   this.getUsersList();
-                })
+                });
               })
             }
           });

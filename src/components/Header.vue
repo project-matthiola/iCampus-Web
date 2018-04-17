@@ -1,10 +1,13 @@
 <template>
-    <el-row>
-      <el-col :span="24">
+    <el-row style="height: 60px">
+      <el-col :span="24" style="height: 60px">
+        <el-col :span="1" style="height: 60px">
+          <img src="@/assets/iCampus.png" style="width: 90%;height: 80%" />
+        </el-col>
         <el-col :span="4">
           <span>iCampus</span>
         </el-col>
-        <el-col :span="20" class="userinfo">
+        <el-col :span="19" class="userinfo">
           <el-dropdown @command="handleCommand" menu-align="start" trigger="click">
           <span class="el-dropdown-link userinfo_inner">
             {{userName}}<i class="el-icon-arrow-down el-icon--right"></i>

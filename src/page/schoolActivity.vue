@@ -38,7 +38,7 @@
                           <span>{{ props.row.place }}</span>
                         </el-form-item>
                         <el-form-item label="活动时间">
-                          <span>{{ props.row.time }}</span>
+                          <span>{{ props.row.information_time }}</span>
                         </el-form-item>
                         <el-form-item label="活动组织者">
                           <span>{{ props.row.source }}</span>
@@ -59,7 +59,7 @@
                   </el-table-column>
                   <el-table-column
                     label="活动时间"
-                    prop="time" sortable>
+                    prop="information_time" sortable>
                   </el-table-column>
                   <el-table-column fixed="right" label="操作" width="150">
                     <template slot-scope="scope">
@@ -79,9 +79,9 @@
                   <el-form-item label="活动地点" prop="place">
                     <el-input v-model="editForm.place" auto-complete="off"></el-input>
                   </el-form-item>
-                  <el-form-item label="活动时间" prop="time">
+                  <el-form-item label="活动时间" prop="information_time">
                     <el-col :span="11">
-                      <el-date-picker type="datetime" placeholder="选择日期时间" v-model="editForm.time" style="width: 100%;"></el-date-picker>
+                      <el-date-picker type="datetime" placeholder="选择日期时间" v-model="editForm.information_time" style="width: 100%;"></el-date-picker>
                     </el-col>
                   </el-form-item>
                   <el-form-item label="活动组织者" prop="source">
@@ -107,9 +107,9 @@
                   <el-form-item label="活动地点" prop="place">
                     <el-input v-model="addForm.place" auto-complete="off"></el-input>
                   </el-form-item>
-                  <el-form-item label="活动时间" prop="time">
+                  <el-form-item label="活动时间" prop="information_time">
                     <el-col :span="11">
-                      <el-date-picker type="datetime" placeholder="选择日期时间" v-model="addForm.time" style="width: 100%;"></el-date-picker>
+                      <el-date-picker type="datetime" placeholder="选择日期时间" v-model="addForm.information_time" style="width: 100%;"></el-date-picker>
                     </el-col>
                   </el-form-item>
                   <el-form-item label="活动组织者" prop="source">
@@ -140,7 +140,8 @@
   import Header from '@/components/Header'
   import Footer from '@/components/Footer'
   import axios from 'axios'
-  import { getActivities,addActivities } from "../api/api"
+  import { getActivities,addActivities,removeActivities,editActivities } from "../api/api"
+  import { GmtToStr,StrToGmt } from "../api/common"
 
   export default {
     name: "schoolActivity",
@@ -156,44 +157,14 @@
         },
         listLoading: false,
         activities: [],
-        /*
-        activities: [{
-          id: '12987122',
-          title: '留学讲座',
-          place: '电院3306',
-          time: 'Sat Apr 14 2018 10:40:52 GMT+0800 (CST)',
-          source: '越扬教育',
-          text: '慢慢干货，留学讲座'
-        }, {
-          id: '12987123',
-          title: '留学讲座',
-          place: '电院3306',
-          time: 'Sat Apr 14 2018 10:40:52 GMT+0800 (CST)',
-          source: '越扬教育',
-          text: '慢慢干货，留学讲座'
-        }, {
-          id: '12987125',
-          title: '留学讲座',
-          place: '电院3306',
-          time: 'Sat Apr 14 2018 10:40:52 GMT+0800 (CST)',
-          source: '越扬教育',
-          text: '慢慢干货，留学讲座'
-        }, {
-          id: '12987126',
-          title: '留学讲座',
-          place: '电院3306',
-          time: 'Sat Apr 14 2018 10:40:52 GMT+0800 (CST)',
-          source: '越扬教育',
-          text: '慢慢干货，留学讲座'
-        }],
-        */
+
         addFormVisible: false,
         addLoading: false,
         addFormRules: {
           title: [
             { required: true, message: '请输入活动名称', trigger: 'blur' }
           ],
-          time: [
+          information_time: [
             { required: true, message: '请输入活动时间', trigger: 'blur' }
           ],
           place: [
@@ -206,7 +177,7 @@
         addForm: {
           title: '',
           place: '',
-          time: '',
+          information_time: '',
           source: '',
           text: ''
         },
@@ -216,7 +187,7 @@
           title: [
             { required: true, message: '请输入活动名称', trigger: 'blur' }
           ],
-          time: [
+          information_time: [
             { required: true, message: '请输入活动时间', trigger: 'blur' }
           ],
           place: [
@@ -230,7 +201,7 @@
           id: 0,
           title: '',
           place: '',
-          time: '',
+          information_time: '',
           source: '',
           text: ''
         }
@@ -281,8 +252,13 @@
           if(valid) {
             this.$confirm('确认提交吗？', '提交', {}).then(() => {
               this.addLoading = true;
-              console.log(this.addForm);
+              let Gmt = this.addForm.information_time;
+              //console.log(Gmt);
+              let Str = GmtToStr(Gmt);
+              this.addForm.information_time = Str;
               let addParams = Object.assign({}, this.addForm);
+              console.log(addParams);
+
               addActivities(addParams).then(data => {
                 console.log(data);
                 let type = data.type;
@@ -312,9 +288,12 @@
           if(valid) {
             this.$confirm('确认提交吗？', '提交', {}).then(() => {
               this.editLoading = true;
+              let Gmt = this.editForm.information_time;
+              let Str = GmtToStr(Gmt);
+              this.editForm.information_time = Str;
               let editParams = Object.assign({}, this.editForm);
               console.log(editParams);
-              axios.put('http://202.120.40.87:22471/Entity/Ubfbd4152866263/iCampus/Information/'+editParams.id, editParams).then((res) => {
+              editActivities(editParams).then((res) => {
                 this.editLoading = false;
                 this.$message({
                   message: '修改成功',
@@ -323,7 +302,7 @@
                 this.$refs['editForm'].resetFields();
                 this.editFormVisible = false;
                 this.getActivityList();
-              })
+              });
             })
           }
         });
@@ -334,8 +313,9 @@
         }).then(() => {
           this.listLoading = true;
 
-          let delParams = {'Information.id': row.id};
-          axios.delete('http://202.120.40.87:22471/Entity/Ubfbd4152866263/iCampus/Information/'+row.id).then((res) => {
+          let delParams = {id: row.id};
+
+          removeActivities(delParams).then((res) => {
             this.listLoading = false;
             this.$message({
               message: '删除成功',
