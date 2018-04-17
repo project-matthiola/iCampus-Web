@@ -3,25 +3,32 @@ import Router from 'vue-router'
 import menus from '@/config/menu-config'
 import Login from '@/page/Login'
 import Register from '@/page/Register'
-import Home from '@/page/home'
+import Home from '@/page/Home'
+import addGrade from '@/page/addGrade'
 
 Vue.use(Router);
 
 let routes = [
   {
     path: '/',
-    name: '',
-    component: Home
+    name: 'home',
+    component: Home,
   },
   {
     path: '/login',
-    name: '',
-    component: Login
+    name: 'login',
+    component: Login,
   },
   {
     path: '/register',
-    name: '',
-    component: Register
+    name: 'register',
+    component: Register,
+  },
+  {
+    name: 'addGrade',
+    //path: '/addGrade/:Cid',
+    path: '/addGrade',
+    component: addGrade
   }
 ];
 
@@ -31,10 +38,11 @@ menus.forEach((item) => {
     routes.push({
       path: `/${sub.componentName}`,
       name: sub.componentName,
-      component: () => import(`@/components/${sub.componentName}`)
+      component: () => import(`@/page/${sub.componentName}`),
     })
   })
 });
 
 
 export default new Router({ routes })
+

@@ -12,9 +12,11 @@
           <el-main>
 
           </el-main>
-          <el-footer>Footer</el-footer>
         </el-container>
       </el-container>
+      <el-footer>
+        <Footer></Footer>
+      </el-footer>
     </el-container>
   </div>
 </template>
@@ -22,11 +24,16 @@
 <script>
   import NavMenu from '@/components/NavMenu'
   import Header from '@/components/Header'
+  import Footer from '@/components/Footer'
     export default {
       name: "Home",
       components: {
         NavMenu,
-        Header
+        Header,
+        Footer
+      },
+      created() {
+        document.title = 'iCampus'
       }
     }
 </script>

@@ -6,7 +6,7 @@
         @open="handleClose"
         @close="handleClose"
         unique-opened
-        router>
+        v-bind:router="true">
         <el-submenu v-for="item in menu" :index="item.id" :key="item.id">
           <template slot="title">
             <i :class="item.iconCls"></i>

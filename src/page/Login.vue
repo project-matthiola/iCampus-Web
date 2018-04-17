@@ -1,6 +1,6 @@
 <template>
   <div class="login_page fillcontain">
-    <myCanvas :dotsNum="dotsNum" :isColor="true"></myCanvas>
+    <!-- <myCanvas :dotsNum="dotsNum" :isColor="true"></myCanvas> -->
     <transition class="form-fade" mode="in-out">
       <section class="form_container" v-show="showLogin">
         <div class="manage_tip">
@@ -26,7 +26,10 @@
 
 <script>
   import myCanvas from 'vue-atom-canvas'
-    export default {
+  import crypto from 'crypto'
+  import { requestLogin } from "../api/api";
+
+  export default {
       name: "Login",
       components: {
           myCanvas
@@ -47,18 +50,54 @@
             },
             showLogin: false,
             dotsNum: 50,
+            users: []
           }
       },
       mounted() {
           this.showLogin= true;
       },
+      created() {
+        document.title = 'iCampus登录'
+      },
       methods: {
           async submitForm(formName) {
             this.$refs[formName].validate(async (valid) => {
               if(valid) {
-                alert('submit!');
+                let loginParams = {'Member.user_id' : this.loginForm.username};
+                requestLogin(loginParams).then((res) => {
+                  this.users = res.data.Member;
+                  console.log(this.users);
+                  if(!this.users){
+                    this.$message.error('当前用户未注册！');
+                    this.$refs[formName].resetFields();
+                    return false;
+                  }
+                  let md5 = crypto.createHash("md5");
+                  md5.update(this.loginForm.password);
+                  let encode_pwd = md5.digest('hex');
+
+                  let password = this.users[0].password;
+                  let role = this.users[0].role;
+                  if(role === 'ROLE_STUDENT') {
+                    this.$message.error('权限错误！');
+                    this.$refs[formName].resetFields();
+                  } else if(password === encode_pwd) {
+                    this.$message({
+                      message: '登录成功！',
+                      type: 'success'
+                    });
+                    sessionStorage.setItem('user', JSON.stringify(this.users));
+                    this.$router.push({path: '/'});
+                  } else {
+                    this.$message.error('密码错误！');
+                    this.$refs[formName].resetFields();
+                  }
+                });
               }else {
-                console.log('error submit');
+                this.$message({
+                  message: '请输入用户和密码！',
+                  type: 'warning'
+                });
                 return false;
               }
             });
