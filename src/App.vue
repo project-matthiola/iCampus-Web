@@ -25,7 +25,7 @@ export default {
   color: #2c3e50;
 }
   .header {
-    background-color: #409EEF;
+    background-color: #D0021B;
     color: #fff;
     line-height: 60px;
   }
