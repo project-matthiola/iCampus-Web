@@ -4,6 +4,7 @@ import menus from '@/config/menu-config'
 import Login from '@/page/Login'
 import Register from '@/page/Register'
 import Home from '@/page/Home'
+import addGrade from '@/page/addGrade'
 
 Vue.use(Router);
 
@@ -22,6 +23,12 @@ let routes = [
     path: '/register',
     name: 'register',
     component: Register,
+  },
+  {
+    name: 'addGrade',
+    //path: '/addGrade/:Cid',
+    path: '/addGrade',
+    component: addGrade
   }
 ];
 

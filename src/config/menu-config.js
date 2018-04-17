@@ -1,13 +1,21 @@
 module.exports = [{
   name: '用户信息管理',
   id: 'userInfoManage',
-  iconCls: 'el-icon-location',
+  iconCls: 'el-icon-share',
   sub: [{
     name: '学生信息',
     componentName: 'studentInfo'
   },{
     name: '教师信息',
     componentName: 'teacherInfo'
+  }]
+  }, {
+  name: '成绩管理',
+  id: 'gradeManage',
+  iconCls: 'el-icon-edit',
+  sub: [{
+    name: '成绩录入',
+    componentName: 'gradeInput'
   }]
   }, {
   name: '事务管理',
