@@ -19,3 +19,11 @@ export const getSelections = params => { return axios.get(`${base}/Selection/`, 
 export const getScores = params => { return axios.get(`${base}/Grade/`, {params: params}); };
 export const initScores = params => { return axios.post(`${base}/Grade/`, params).then(res => res.data); };
 export const editScore = params => { return axios.put(`${base}/Grade/`+params.id, params); };
+
+export const getRequest = params => { return axios.get(`${base}/Request/`, {params: params}); };
+export const editRequest = params => { return axios.put(`${base}/Request/`+params.id, params); };
+
+export const getNews = params => { return axios.get(`${base}/News/`, {params: params}); };
+export const addNews = params => { return axios.post(`${base}/News/`, params).then(res => res.data); };
+export const removeNews = params => { return axios.delete(`${base}/News/`+params.id); };
+export const editNews = params => { return axios.put(`${base}/News/`+params.id, params); };

@@ -47,5 +47,15 @@ Array.prototype.remove = function(obj){
       this.length = this.length-1;
     }
   }
-} ;
+};
+
+export const getRole = () => {
+  let user = sessionStorage.getItem('user');
+  let role = 'ROLE_GUEST';
+  if(user) {
+    user = JSON.parse(user);
+    role = user[0].role;
+  }
+  return role;
+};
 

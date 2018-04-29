@@ -19,7 +19,7 @@
                     <el-button type="primary" v-on:click="getUser" plain>查询</el-button>
                   </el-form-item>
                   <el-form-item>
-                    <el-button type="primary" @click="handleAdd" plain>新增</el-button>
+                    <el-button type="primary" @click="handleAdd" plain :disabled="addPermission">新增</el-button>
                   </el-form-item>
                 </el-form>
               </el-col>
@@ -41,8 +41,8 @@
                 </el-table-column>
                 <el-table-column fixed="right" label="操作" width="150">
                   <template slot-scope="scope">
-                    <el-button @click="handleEdit(scope.$index, scope.row)" type="primary" size="small" plain>编辑</el-button>
-                    <el-button @click="handleDel(scope.$index, scope.row)" type="danger" size="small" plain>删除</el-button>
+                    <el-button @click="handleEdit(scope.$index, scope.row)" type="primary" size="small" plain :disabled="editPermission">编辑</el-button>
+                    <el-button @click="handleDel(scope.$index, scope.row)" type="danger" size="small" plain :disabled="delPermission">删除</el-button>
                   </template>
                 </el-table-column>
               </el-table>
@@ -123,7 +123,8 @@
     import Footer from '@/components/Footer'
     import crypto from 'crypto'
     import axios from 'axios'
-    import{ getUserList, register,requestLogin,removeUser,editUser } from "../api/api";
+    import{ getUserList, register,requestLogin,removeUser,editUser } from "../api/api"
+    import{ getRole } from "../api/common";
 
     export default {
       name: "teacherInfo",
@@ -137,6 +138,9 @@
           total: 50,
           page: 1,
           listLoading: false,
+          editPermission: false,
+          delPermission: false,
+          addPermission: false,
 
           editFormVisible: false,
           editLoading: false,
@@ -305,6 +309,15 @@
           console.log(this.users);
           this.listLoading = false;
         });
+        let role = getRole();
+        this.editPermission = true;
+        this.delPermission = true;
+        this.addPermission = true;
+        if(role === 'ROLE_ADMIN') {
+          this.editPermission = false;
+          this.delPermission = false;
+          this.addPermission = false;
+        }
       },
       created() {
         document.title = '教师信息管理'

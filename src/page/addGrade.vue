@@ -11,18 +11,6 @@
         <el-container>
           <el-main>
             <template>
-              <!--
-              <el-col :span="24" class="">
-                <el-form :inline="true" :model="filters" class="demo-form-inline">
-                  <el-form-item>
-                    <el-input v-model="filters.name" placeholder="学生姓名"></el-input>
-                  </el-form-item>
-                  <el-form-item>
-                    <el-button type="primary" v-on:click="" plain>查询</el-button>
-                  </el-form-item>
-                </el-form>
-              </el-col>
-              -->
 
               <el-table :data="scores" highlight-current-row v-loading="listLoading"
                         :default-sort="{prop: 'id', order: 'descending'}" style="width: 100%">

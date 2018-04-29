@@ -5,7 +5,6 @@
         class="el-menu-vertical-demo"
         @open="handleClose"
         @close="handleClose"
-        unique-opened
         v-bind:router="true">
         <el-submenu v-for="item in menu" :index="item.id" :key="item.id">
           <template slot="title">
@@ -29,7 +28,8 @@
       data() {
         return {
           menu: menu,
-          isCollapse: false
+          isCollapse: false,
+          visitPermission: true
         }
       },
       methods: {

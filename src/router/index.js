@@ -5,6 +5,7 @@ import Login from '@/page/Login'
 import Register from '@/page/Register'
 import Home from '@/page/Home'
 import addGrade from '@/page/addGrade'
+import userSet from '@/page/userSet'
 
 Vue.use(Router);
 
@@ -29,6 +30,11 @@ let routes = [
     //path: '/addGrade/:Cid',
     path: '/addGrade',
     component: addGrade
+  },
+  {
+    path: '/userSet',
+    name: 'userSet',
+    component: userSet
   }
 ];
 

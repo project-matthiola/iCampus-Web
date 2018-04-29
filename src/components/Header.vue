@@ -13,9 +13,14 @@
             {{userName}}<i class="el-icon-arrow-down el-icon--right"></i>
           </span>
             <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item command="home">首页</el-dropdown-item>
-              <el-dropdown-item command="setting">设置</el-dropdown-item>
-              <el-dropdown-item command="signout">退出</el-dropdown-item>
+              <el-dropdown-item command="home"><i class="el-icon-search"/>首页</el-dropdown-item>
+              <div v-if="isLogin">
+                <el-dropdown-item command="setting"><i class="el-icon-setting"/>设置</el-dropdown-item>
+                <el-dropdown-item command="signout"><i class="el-icon-circle-close-outline"/>退出</el-dropdown-item>
+              </div>
+              <div v-else>
+                <el-dropdown-item command="signin"><i class="el-icon-upload2"/>登录</el-dropdown-item>
+              </div>
             </el-dropdown-menu>
           </el-dropdown>
         </el-col>
@@ -28,7 +33,8 @@
       name: "Header",
       data() {
         return {
-          userName: 'UnknownUser'
+          userName: 'GUEST',
+          isLogin: false
         }
       },
       methods: {
@@ -42,6 +48,12 @@
               } else {
                 this.$router.push('login');
               }
+            }
+            if(command === 'signin') {
+              this.$router.push('/login');
+            }
+            if(command === 'setting') {
+              this.$router.push('/userSet');
             }
             if(command === 'signout') {
               sessionStorage.removeItem('user');
@@ -63,6 +75,7 @@
         if(user) {
           user = JSON.parse(user);
           this.userName = user[0].user_id || '';
+          this.isLogin = true;
         }
       }
 

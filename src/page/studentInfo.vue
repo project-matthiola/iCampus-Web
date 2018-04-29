@@ -20,7 +20,7 @@
                       <el-button type="primary" v-on:click="getUser" plain>查询</el-button>
                     </el-form-item>
                     <el-form-item>
-                      <el-button type="primary" @click="handleAdd" plain>新增</el-button>
+                      <el-button type="primary" @click="handleAdd" plain :disabled="addPermission">新增</el-button>
                     </el-form-item>
                   </el-form>
                 </el-col>
@@ -42,8 +42,8 @@
                   </el-table-column>
                   <el-table-column fixed="right" label="操作" width="150">
                     <template slot-scope="scope">
-                      <el-button @click="handleEdit(scope.$index, scope.row)" type="primary" size="small" plain>编辑</el-button>
-                      <el-button @click="handleDel(scope.$index, scope.row)" type="danger" size="small" plain>删除</el-button>
+                      <el-button @click="handleEdit(scope.$index, scope.row)" type="primary" size="small" plain :disabled="editPermission">编辑</el-button>
+                      <el-button @click="handleDel(scope.$index, scope.row)" type="danger" size="small" plain :disabled="delPermission">删除</el-button>
                     </template>
                   </el-table-column>
                 </el-table>
@@ -126,6 +126,7 @@
   import crypto from 'crypto'
   import axios from 'axios'
   import{ getUserList,register,requestLogin,removeUser,editUser } from "../api/api";
+  import{ getRole } from "../api/common";
 
   export default {
     name: "studentInfo",
@@ -143,12 +144,21 @@
         total: 50,
         page: 1,
         listLoading: false,
+        editPermission: false,
+        delPermission: false,
+        addPermission: false,
 
         editFormVisible: false,
         editLoading: false,
         editFormRules: {
           user_id: [
             { required: true, message: '请输入学号', trigger: 'blur' }
+          ],
+          password: [
+            { required: true, message: '请输入密码', trigger: 'blur' }
+          ],
+          name: [
+            { required: true, message: '请输入姓名', trigger: 'blur' }
           ]
         },
         editForm: {
@@ -312,6 +322,15 @@
         console.log(this.users);
         this.listLoading = false;
       });
+      this.editPermission = true;
+      this.delPermission = true;
+      this.addPermission = true;
+      let role = getRole();
+      if(role !== 'ROLE_GUEST') {
+        this.editPermission = false;
+        this.delPermission = false;
+        this.addPermission = false;
+      }
     },
     created() {
       document.title = '学生信息管理'

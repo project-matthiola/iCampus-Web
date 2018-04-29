@@ -20,7 +20,7 @@
                       <el-button type="primary" v-on:click="getActivity" plain>查询</el-button>
                     </el-form-item>
                     <el-form-item>
-                      <el-button type="primary" @click="handleAdd" plain>新增</el-button>
+                      <el-button type="primary" @click="handleAdd" plain :disabled="addPermission">新增</el-button>
                     </el-form-item>
                   </el-form>
                 </el-col>
@@ -31,19 +31,19 @@
                   <el-table-column type="expand">
                     <template slot-scope="props">
                       <el-form label-position="left" inline class="demo-table-expand">
-                        <el-form-item label="活动名称">
+                        <el-form-item label="活动名称：">
                           <span>{{ props.row.title }}</span>
                         </el-form-item>
-                        <el-form-item label="活动地点">
+                        <el-form-item label="活动地点：">
                           <span>{{ props.row.place }}</span>
                         </el-form-item>
-                        <el-form-item label="活动时间">
+                        <el-form-item label="活动时间：">
                           <span>{{ props.row.information_time }}</span>
                         </el-form-item>
-                        <el-form-item label="活动组织者">
+                        <el-form-item label="活动组织者：">
                           <span>{{ props.row.source }}</span>
                         </el-form-item>
-                        <el-form-item label="活动描述">
+                        <el-form-item label="活动描述：">
                           <span>{{ props.row.text }}</span>
                         </el-form-item>
                       </el-form>
@@ -63,8 +63,8 @@
                   </el-table-column>
                   <el-table-column fixed="right" label="操作" width="150">
                     <template slot-scope="scope">
-                      <el-button @click="handleEdit(scope.$index, scope.row)" type="primary" size="small" plain>编辑</el-button>
-                      <el-button @click="handleDel(scope.$index, scope.row)" type="danger" size="small" plain>删除</el-button>
+                      <el-button @click="handleEdit(scope.$index, scope.row)" type="primary" size="small" plain :disabled="editPermission">编辑</el-button>
+                      <el-button @click="handleDel(scope.$index, scope.row)" type="danger" size="small" plain :disabled="delPermission">删除</el-button>
                     </template>
                   </el-table-column>
                 </el-table>
@@ -141,7 +141,7 @@
   import Footer from '@/components/Footer'
   import axios from 'axios'
   import { getActivities,addActivities,removeActivities,editActivities } from "../api/api"
-  import { GmtToStr,StrToGmt } from "../api/common"
+  import { GmtToStr,StrToGmt,getRole } from "../api/common"
 
   export default {
     name: "schoolActivity",
@@ -157,6 +157,9 @@
         },
         listLoading: false,
         activities: [],
+        editPermission: false,
+        addPermission: false,
+        delPermission: false,
 
         addFormVisible: false,
         addLoading: false,
@@ -218,6 +221,15 @@
         console.log(this.activities);
         this.listLoading = false;
       });
+      this.editPermission = true;
+      this.delPermission = true;
+      this.addPermission = true;
+      let role = getRole();
+      if(role === 'ROLE_ADMIN') {
+        this.editPermission = false;
+        this.delPermission = false;
+        this.addPermission = false;
+      }
     },
     methods: {
       getActivityList() {

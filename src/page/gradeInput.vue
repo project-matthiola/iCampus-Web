@@ -52,7 +52,8 @@
   import NavMenu from '@/components/NavMenu'
   import Header from '@/components/Header'
   import Footer from '@/components/Footer'
-  import { getCourses,getSelections } from "../api/api";
+  import { getCourses,getSelections } from "../api/api"
+  import { getRole } from "../api/common"
   import axios from 'axios'
 
   export default {
@@ -92,9 +93,11 @@
         let selectParams = {
           'Selection.user_id': user_id
         };
+        //console.log(this.selections);
         getSelections(selectParams).then((res) => {
           this.selections = res.data.Selection;
         });
+        //console.log(this.selections);
       },
       getCourse() {
         this.listLoading = true;
@@ -112,17 +115,21 @@
       handleEnter: function(index, row) {
         let course_id = row.course_id;
         let flag = 0;
-        for(let i = 0;i < this.selections.length;i++) {
-          let tmp_selection = this.selections[i];
-          if(tmp_selection['course_id'] === course_id){
-            flag++;
+        let role = getRole();
+        console.log(this.selections);
+        if(this.selections != null) {
+          for(let i = 0;i < this.selections.length;i++) {
+            let tmp_selection = this.selections[i];
+            if(tmp_selection['course_id'] === course_id){
+              flag++;
+            }
           }
         }
-        if(flag === 0){
-          this.$message.error('权限错误！');
-        } else{
+        if(flag !== 0 || role === 'ROLE_ADMIN') {
           let Cid = row.id;
           this.$router.push({name: 'addGrade', params:{Cid: Cid}});
+        } else {
+          this.$message.error('权限错误！');
         }
       }
     },
