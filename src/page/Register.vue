@@ -82,7 +82,7 @@
             ]
           },
           showRegister: false,
-          dotsNum: 30,
+          dotsNum: 20,
         }
       },
       mounted() {
@@ -100,7 +100,7 @@
                 let encode_pwd = md5.digest('hex');
 
                 let registerParams = {user_id: this.registerForm.username, password: encode_pwd,
-                role: "ROLE_STUDENT"};
+                role: "ROLE_TEACHER"};
                 let requestParams = {'Member.user_id': this.registerForm.username};
                 requestLogin(requestParams).then((res) => {
                   if(res.data.Member) {

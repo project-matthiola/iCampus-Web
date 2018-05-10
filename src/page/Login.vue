@@ -1,6 +1,6 @@
 <template>
   <div class="login_page fillcontain">
-    <!-- <myCanvas :dotsNum="dotsNum" :isColor="true"></myCanvas> -->
+    <myCanvas :dotsNum="dotsNum" :isColor="true"></myCanvas>
     <transition class="form-fade" mode="in-out">
       <section class="form_container" v-show="showLogin">
         <div class="manage_tip">
@@ -49,7 +49,7 @@
               ]
             },
             showLogin: false,
-            dotsNum: 50,
+            dotsNum: 20,
             users: []
           }
       },
